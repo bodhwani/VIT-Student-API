@@ -1,7 +1,7 @@
 ################################################################################ IMPORTS ##############
 
 from flask import Flask, request, jsonify
-from fetchData import timetable, get_facultyAdvisor_details, get_attendance_details, get_exam_schedule, get_marks, get_spotlight, get_apt_attendance, get_acad_history, change_password, getFaculties
+from fetchData import *
 from CoursePage import get_courses, get_slot, get_faculty, get_data
 from majorRoute import majorRoute
 import os
@@ -13,13 +13,20 @@ app = Flask(__name__)
 @app.route('/home')
 def hello_world(): return "welcome_to_student_login_api"
 
+################################################################################ FACULTY ADVISOR #######
+
+@app.route('/login', methods=["GET"])
+def login_det():
+	reg_no = request.args.get("regNo")
+	pwd = request.args.get("psswd")
+
+	return jsonify(**lgin(reg_no, pwd))
+
 ################################################################################ SPOTLIGHT #############
 
 @app.route('/spotlight')
 def spotlight():
-
-	data = get_spotlight()
-	return jsonify(**data)
+	return jsonify(**get_spotlight())
 
 ################################################################################ FACULTY ADVISOR #######
 
@@ -28,8 +35,7 @@ def login_facultyAdvisor():
 	reg_no = request.args.get("regNo")
 	pwd = request.args.get("psswd")
 
-	data = get_facultyAdvisor_details(reg_no, pwd)
-	return jsonify(**data)
+	return jsonify(**get_facultyAdvisor_details(reg_no, pwd))
 
 ################################################################################ TIME TABLE ############
 
@@ -38,8 +44,7 @@ def login_timetable():
 	reg_no = request.args.get("regNo")
 	pwd = request.args.get("psswd")
 
-	data = timetable(reg_no, pwd)
-	return jsonify(**data)
+	return jsonify(**timetable(reg_no, pwd))
 
 ################################################################################ ATTENDANCE ############
 
@@ -48,8 +53,7 @@ def login_attendance():
 	reg_no = request.args.get("regNo")
 	pwd = request.args.get("psswd")
 
-	data = get_attendance_details(reg_no, pwd)
-	return jsonify(**data)
+	return jsonify(**get_attendance_details(reg_no, pwd))
 
 ################################################################################ MARKS #################
 
@@ -58,8 +62,7 @@ def get_mark():
 	reg_no = request.args.get("regNo")
 	pwd = request.args.get("psswd")
 
-	data = get_marks(reg_no, pwd)
-	return jsonify(**data)
+	return jsonify(**get_marks(reg_no, pwd))
 
 ################################################################################ EXAM SCHEDULE #########
 
@@ -68,8 +71,7 @@ def login_examschedule():
 	reg_no = request.args.get("regNo")
 	pwd = request.args.get("psswd")
 
-	data = get_exam_schedule(reg_no, pwd)
-	return jsonify(**data)
+	return jsonify(**get_exam_schedule(reg_no, pwd))
 
 ################################################################################ COURSE PAGE ###########
 
@@ -78,8 +80,7 @@ def courseBase():
 	reg_no = request.args.get("regNo")
 	pwd = request.args.get("psswd")
 
-	data = get_courses(reg_no, pwd)
-	return jsonify(**data)
+	return jsonify(**get_courses(reg_no, pwd))
 
 @app.route('/coursepage/slots', methods=["GET"])
 def courselevel1():
@@ -87,8 +88,7 @@ def courselevel1():
 	pwd = request.args.get("psswd")
 	crs = request.args.get("crs")
 
-	data = get_slot(reg_no, pwd,crs)
-	return jsonify(**data)
+	return jsonify(**get_slot(reg_no, pwd,crs))
 
 @app.route('/coursepage/faculties', methods=["GET"])
 def courselevel2():
@@ -97,8 +97,7 @@ def courselevel2():
 	crs = request.args.get("crs")
 	slt = request.args.get("slt").replace(" ","+")
 
-	data = get_faculty(reg_no, pwd,crs,slt)
-	return jsonify(**data)
+	return jsonify(**get_faculty(reg_no, pwd,crs,slt))
 
 @app.route('/coursepage/data', methods=["GET"])
 def courselevel3():
@@ -108,18 +107,17 @@ def courselevel3():
 	slt = request.args.get("slt").replace(" ","+")
 	fac = request.args.get("fac")
 
-	data = get_data(reg_no, pwd,crs,slt,fac)
-	return jsonify(**data)
+	return jsonify(**get_data(reg_no, pwd,crs,slt,fac))
 
 ################################################################################ APT ATTENDANCE ########
 
-@app.route('/aptattn', methods=["GET"])
+"""@app.route('/aptattn', methods=["GET"])
 def aptattendance():
 	reg_no = request.args.get("regNo")
 	pwd = request.args.get("psswd")
 
 	data = get_apt_attendance(reg_no, pwd)
-	return jsonify(**data)
+	return jsonify(**data)"""
 
 ################################################################################ ACADEMIC HISTORY ######
 
@@ -128,15 +126,16 @@ def acadHistory():
 	reg_no = request.args.get("regNo")
 	pwd = request.args.get("psswd")
 
-	data = get_acad_history(reg_no, pwd)
-	return jsonify(**data)
+	return jsonify(**get_acad_history(reg_no, pwd))
 
 ################################################################################ RESULT ################
 
-@app.route('/')
+@app.route('/result')
 def result():
-	return 'hello_world'
-	#return jsonify(**results())
+	reg_no = request.args.get("regNo")
+	pwd = request.args.get("psswd")
+
+	return jsonify(**results(reg_no,pwd))
 
 ################################################################################ CHANGE PASSWORD #######
 
@@ -146,16 +145,26 @@ def passwordchange():
 	pwd = request.args.get("psswd")
 	newpwd = request.args.get("npsswd")
 
-	data = change_password(reg_no, pwd,newpwd)
-	return jsonify(**data)
+	return jsonify(**change_password(reg_no, pwd, newpwd))
 
-################################################################################ FACULTY DATABASE ######
+################################################################################ FACULTY SEARCH ######
 
 @app.route('/getFaculty', methods = ["GET"])
 def getData():
 	reg_no = request.args.get("regNo")
 	pwd = request.args.get("psswd")
-	data = getFaculties(reg_no, pwd)
+	query = request.args.get("facName")
+	data = getFaculties(reg_no, pwd, query)
+	return jsonify(**data)
+
+################################################################################ FACULTY DETAILS ######
+
+@app.route('/getFacultyDet', methods = ["GET"])
+def getdata():
+	reg_no = request.args.get("regNo")
+	pwd = request.args.get("psswd")
+	empid = request.args.get("empId")
+	data = getFaculty_det(reg_no, pwd, empid)
 	return jsonify(**data)
 
 ################################################################################ REFRESH ###############
@@ -164,8 +173,8 @@ def getData():
 def Refresh():
 	reg_no = request.args.get("regNo")
 	pwd = request.args.get("psswd")
-	data = majorRoute(reg_no, pwd)
-	return jsonify(**data)
+
+	return jsonify(**majorRoute(reg_no, pwd))
 
 ################################################################################ MAIN ##################
 
