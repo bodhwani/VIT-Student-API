@@ -257,8 +257,8 @@ def get_exam_schedule(reg_no = "", pwd = ""):
 
 		#opening exam schedule page
 
-		br.open("https://academics.vit.ac.in/student/exam_schedule.asp?sem=WS")
-		response = br.open("https://academics.vit.ac.in/student/exam_schedule.asp?sem=WS")
+		br.open("https://academics.vit.ac.in/student/exam_schedule.asp?sem=FS")
+		response = br.open("https://academics.vit.ac.in/student/exam_schedule.asp?sem=FS")
 		soup = BeautifulSoup(response.get_data())
 
 		#extracting tables
