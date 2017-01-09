@@ -1,23 +1,20 @@
 # VIT-Student-API
-##Features
-<ul>
-<li>Faculty Information</li>
-<li>Marks</li>
-<li>Course Page</li>
-<li>Attendance</li>
-<li>Academic History</li>
-<li>Exam schedule</li>
-and many more.
-</ul>
+An API to extract data about VIT students, built by GDG VIT VELLORE
 
-##Language used :
-<b>Python</b>
-##Framework used 
-<b>Tornado</b>
-##Made with ❤ by :
-<ul>
-<li>Ashwini Purohit</li>
-<li>Piyush Goyal</li>
-</ul>
-## To contribute, please send pull requests. Your contribution matters. :) 
-##By: GDG VIT VELLORE
+> This repository has been superceded a [Go](https://github.com/shubhodeep9/go-MyVIT) version
+
+Language used: Python  
+Framework used: Tornado
+
+## Features
+ - Faculty Information
+ - Marks
+ - Course Page
+ - Attendance
+ - Academic History
+ - Exam schedule
+
+## Authors
+Made with ❤ by :
+ - Ashwini Purohit
+ - Piyush Goyal
